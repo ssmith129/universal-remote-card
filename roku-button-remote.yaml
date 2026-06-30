@@ -1,0 +1,164 @@
+type: custom:universal-remote-card
+platform: Roku
+remote_id: remote.bedroom_tv
+keyboard_id: remote.bedroom_tv
+media_player_id: media_player.bedroom_tv
+title: Bedroom Roku TV
+rows:
+  # Power / navigation utility row
+  - - power
+    - back
+    - home
+  # Navigation D-pad (button grid: up / left-center-right / down)
+  - - dpad
+  # Playback transport
+  - - rewind
+    - play_pause
+    - fast_forward
+    - replay
+  # Volume (down / mute / up) + utility (info / keyboard) in one row
+  - - volume_down
+    - volume_mute
+    - volume_up
+    - info
+    - keyboard
+  # Streaming app sources
+  - - netflix
+    - disney
+    - hulu
+    - max
+  - - primevideo
+    - youtube
+    - spotify
+    - paramount
+custom_actions: []
+styles: |-
+  /* ---- Card shell ---- */
+  :host {
+    --primary: #8b6cff;          /* accent */
+    --primary-soft: #c9b8ff;     /* icon tint */
+    --surface: rgba(38, 38, 46, 0.92);
+    --surface-hi: rgba(54, 54, 64, 0.92);
+    padding: 8px 4px;
+  }
+
+  /* ---- Expanded vertical gaps between sections ---- */
+  .row {
+    justify-content: center;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  #row-1 { margin-top: 4px; }   /* trim top of first section */
+
+  /* ---- Polished buttons ---- */
+  remote-button {
+    box-sizing: border-box;       /* padding stays inside the button box */
+    background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+    border-radius: 18px;
+    padding: 11px;
+    margin: 5px;
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    --icon-size: 26px;
+    --ha-ripple-color: var(--primary);
+    --ha-ripple-pressed-color: var(--primary);
+  }
+  remote-button:hover {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+  remote-button:active {
+    transform: translateY(1px) scale(0.97);
+  }
+
+  /* ---- Icon theming ---- */
+  remote-button::part(icon) {
+    color: var(--primary-soft);
+  }
+  #power::part(icon)        { color: #ff5c5c; }   /* power = red accent */
+  #volume_mute::part(icon)  { color: #ffce5c; }   /* mute  = amber accent */
+  #keyboard::part(icon)     { color: var(--primary); }
+
+  /* ---- Enlarged square d-pad ---- */
+  /* The dpad shorthand renders as #pad-1: a 3x3 grid of #up/#down/#left/#right
+     (tail-less chevron arrows) around a #center circle enter button. */
+  #pad-1 {
+    --icon-size: 64px;                 /* grid cell size = bigger pad */
+    grid-gap: 6px;
+    padding: 8px;
+    margin: 6px auto;
+    background: linear-gradient(145deg, var(--surface-hi), var(--surface));
+    border-radius: 22px;
+    box-shadow:
+      0 4px 14px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+  /* Direction tiles fill their grid cells exactly so chevrons sit dead-center */
+  #pad-1 remote-button {
+    width: 64px;
+    height: 64px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 12px;
+    --icon-size: 34px;
+  }
+  #pad-1 .empty-button {
+    width: 64px;
+    height: 64px;
+  }
+  /* Circle enter button, accented and raised above the pad */
+  #pad-1 #center {
+    background: linear-gradient(145deg, #4a4658, #322e42);
+    border-radius: 50%;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  #pad-1 #center::part(icon) {
+    color: var(--primary);
+  }
+
+  /* ---- Phone-width compaction: fit full card with no scroll ---- */
+  /* Overrides sizing/spacing only — accent, gradient, shadow, and hover/press are inherited from above */
+  @media (max-width: 428px) {
+    :host {
+      padding: 2px 2px;
+    }
+    .row {
+      gap: 6px;
+      margin: 6px 0;       /* tight gaps for short mobile screens */
+    }
+    #row-1 { margin-top: 2px; }
+    remote-button {
+      padding: 6px;
+      margin: 3px;
+      border-radius: 12px;
+      --icon-size: 18px;
+    }
+    /* Keep the square d-pad enlarged but scaled to fit the screen */
+    #pad-1 {
+      --icon-size: 48px;
+      grid-gap: 5px;
+      padding: 6px;
+      margin: 3px auto;
+    }
+    #pad-1 remote-button {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      --icon-size: 27px;
+    }
+    #pad-1 .empty-button {
+      width: 48px;
+      height: 48px;
+    }
+  }
+grid_options:
+  columns: 12
+  rows: auto
